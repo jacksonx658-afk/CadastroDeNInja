@@ -1,6 +1,9 @@
-package dev.java10x.CadastrosDeNinjas;
+package dev.java10x.CadastrosDeNinjas.Ninjas;
 
+import dev.java10x.CadastrosDeNinjas.Missoes.MissoesModel;
 import jakarta.persistence.*;
+
+import java.util.List;
 
 // Entity trasnforma uma classe em uma entidade do Banco de Dados
 @Table(name = "tb_cadastro")
@@ -12,6 +15,11 @@ public class NinjaModel {
     private String nome;
     private String email;
     private int idade;
+
+    // @ManyToOne um ninja tem uma unica missao
+    @ManyToOne
+    @JoinColumn(name = "missoes_id") // chave estrangeira
+    private MissoesModel missoes;
 
     public NinjaModel() {
     }
