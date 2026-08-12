@@ -3,8 +3,14 @@ package dev.java10x.CadastrosDeNinjas.Missoes;
 
 import dev.java10x.CadastrosDeNinjas.Ninjas.NinjaModel;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Entity
+@NoArgsConstructor
+@AllArgsConstructor
+@Data
 
 @Table(name = "tb missoes")
 
@@ -17,5 +23,4 @@ public class MissoesModel {
     // @OneToMany uma missao pode ter varios ninjas
     @OneToMany(mappedBy = "missoes")
     private NinjaModel ninja;
-
 }
