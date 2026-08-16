@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://apache.org" xmlns:xsi="http://w3.org"
+<project xmlns="http://apache.org"
+		 xmlns:xsi="http://w3.org"
 		 xsi:schemaLocation="http://apache.org https://apache.org">
 	<modelVersion>4.0.0</modelVersion>
-
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>4.1.0</version>
+		<version>3.4.2</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 
@@ -17,37 +17,37 @@
 	<description>Uma API para cadastros de ninjas</description>
 
 	<properties>
-		<java.version>26</java.version>
+		<java.version>21</java.version>
 	</properties>
 
 	<dependencies>
-		<!-- Web: Para criar os Controllers REST (Traz Jakarta Servlet) -->
+		<!-- Web: Para criar os Controllers REST -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-web</artifactId>
 		</dependency>
 
-		<!-- JPA: Para persistência de dados (Traz Jakarta Persistence) -->
+		<!-- JPA: Para persistência de dados -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-data-jpa</artifactId>
 		</dependency>
 
-		<!-- Lombok: Para reduzir código boilerplate (Getters, Setters, etc.) -->
+		<!-- Lombok: Atualizado explicitamente para compatibilidade com Java 21+ -->
 		<dependency>
 			<groupId>org.projectlombok</groupId>
 			<artifactId>lombok</artifactId>
-			<optional>true</optional>
+			<version>1.18.36</version>
+			<scope>provided</scope>
 		</dependency>
 
-
-		<!-- Validation: Para validar campos como @NotNull e @Size (Traz Jakarta Validation) -->
+		<!-- Validation: Para validar campos -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-validation</artifactId>
 		</dependency>
 
-		<!-- Banco de dados H2: Roda em memória para testes rápidos -->
+		<!-- Banco de dados H2: Roda perfeitamente na versão 3.4.2 -->
 		<dependency>
 			<groupId>com.h2database</groupId>
 			<artifactId>h2</artifactId>
@@ -67,6 +67,14 @@
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
+				<configuration>
+					<excludes>
+						<exclude>
+							<groupId>org.projectlombok</groupId>
+							<artifactId>lombok</artifactId>
+						</exclude>
+					</excludes>
+				</configuration>
 			</plugin>
 		</plugins>
 	</build>
