@@ -3,14 +3,14 @@ package dev.java10x.CadastrosDeNinjas.Missoes;
 import org.springframework.web.bind.annotation.*;
 
 @RequestMapping
-@RestController("missoes")
+@RestController("/missoes")
 public class MissoesController {
 
     // GET -- Mandar uma requisição para mostrar missões
 
-    @GetMapping("/mostrar")
+    @GetMapping("/listar")
     public String ListarMissao(){
-        return "Missão listada com sucesso";
+        return "Missões listadas com sucesso";
     }
 
     // POST -- Mandar uma requisição para criar as missões
