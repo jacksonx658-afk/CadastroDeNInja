@@ -25,6 +25,8 @@ public class MissoesModel {
     private String dificuldade;
     // @OneToMany uma missao pode ter varios ninjas
     @OneToMany(mappedBy = "missoes")
+
+    // Previnir o erro de serialização @JsonIgnore
     @JsonIgnore
     private List<NinjaModel> ninjas;
 }
