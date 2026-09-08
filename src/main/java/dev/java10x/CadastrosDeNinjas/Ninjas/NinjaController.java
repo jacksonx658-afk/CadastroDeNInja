@@ -6,6 +6,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/ninjas")
+
 public class NinjaController {
 
     NinjaService ninjaService;
@@ -13,11 +14,6 @@ public class NinjaController {
     public NinjaController(NinjaService ninjaService) {
         this.ninjaService = ninjaService;
     }
-
-    @GetMapping("/boasVindas")
-    public String boasVindas(){
-        return "Essa é minha primeira mensagem nessa rota";
-        }
 
     // READ
 
@@ -49,8 +45,9 @@ public class NinjaController {
 
     // DELETE
 
-    @DeleteMapping("/deletarID")
-    public String DeletarNijas(){
-        return "Deletar Ninjas por ID";
+    @DeleteMapping("/deletar/{id}")
+    public void DeletarNijasPorId(@PathVariable Long id){
+        ninjaService.DeletarNijasPorId(id);
+
     }
 }
