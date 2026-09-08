@@ -18,11 +18,15 @@ import java.util.List;
 @Table(name = "tb_missoes")
 
 public class MissoesModel {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
+
     private String nome;
+
     private String dificuldade;
+
     // @OneToMany uma missao pode ter varios ninjas
     @OneToMany(mappedBy = "missoes")
 
