@@ -36,7 +36,13 @@ public class NinjaService {
         ninjaRepository.deleteById(id);
     }
 
-    // DELETE -- Mandar uma requisição para deletar as missões
+    // atualizar ninjas
 
-    public
+    public NinjaModel atualizarNinja(Long id, NinjaModel ninjaAtualizado){
+        if (ninjaRepository.existsById(id)) {
+            ninjaAtualizado.setId(id);
+            return ninjaRepository.save(ninjaAtualizado);
+        }
+        return null;
+    }
 }
