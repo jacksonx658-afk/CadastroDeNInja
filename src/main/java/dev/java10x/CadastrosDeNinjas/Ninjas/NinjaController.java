@@ -18,8 +18,18 @@ public class NinjaController {
     // READ
 
     @GetMapping("/listar")
-    public List<NinjaModel> listaNinjas(){
+    public List<NinjaDTO> listaNinjas(){
         return ninjaService.listarNinjas();
+    }
+
+    @GetMapping("/listar/{id}")
+    public NinjaDTO ListarNinjasporId(@PathVariable Long id){
+        return ninjaService.listarNinjasPorId(id);
+    }
+
+    @GetMapping("/listarMaiorque18")
+    public List<NinjaDTO> listarNinjasMaioresDe18Anos(){
+        return ninjaService.listarNinjasMaioresDe18Anos();
     }
 
     // CREATE
@@ -29,17 +39,10 @@ public class NinjaController {
         return ninjaService.criarNinjas(ninja);
     }
 
-    // READ
-
-    @GetMapping("/listar/{id}")
-    public NinjaModel ListarNijasporId(@PathVariable Long id){
-        return ninjaService.listarNinjasPorId(id);
-    }
-
     // UPADATE
 
     @PutMapping("/alterar/{id}")
-    public NinjaModel atualizarNija(@PathVariable Long id, @RequestBody NinjaModel ninjaAtualizado){
+    public NinjaDTO atualizarNija(@PathVariable Long id, @RequestBody NinjaDTO ninjaAtualizado){
         return ninjaService.atualizarNinja(id,ninjaAtualizado);
     }
 

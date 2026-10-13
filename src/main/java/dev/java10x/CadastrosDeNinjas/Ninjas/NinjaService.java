@@ -3,6 +3,9 @@ package dev.java10x.CadastrosDeNinjas.Ninjas;
 import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
+
 
 @Service
 public class NinjaService {
@@ -16,14 +19,27 @@ public class NinjaService {
     }
 
     // listar ninjas
-    public List<NinjaModel> listarNinjas() {
-        return ninjaRepository.findAll();
+    public List<NinjaDTO> listarNinjas() {
+        List<NinjaModel> ninja = ninjaRepository.findAll();
+        return ninja.stream()
+                .map(ninjaMapper::map)
+                .collect(Collectors.toList());
     }
 
     // listar ninjas por id
-    public NinjaModel listarNinjasPorId(Long id){
+    public NinjaDTO listarNinjasPorId(Long id){
         Optional<NinjaModel> NinjaporId = ninjaRepository.findById(id);
-        return NinjaporId.orElse(null);
+        return NinjaporId.map(ninjaMapper::map).orElse(null);
+    }
+
+    // listar ninjas maiores de 18 anos
+
+    public List<NinjaDTO> listarNinjasMaioresDe18Anos(){
+        List<NinjaModel> ninjaMaiores = ninjaRepository.findAll();
+        return ninjaMaiores.stream()
+                .filter(ninjaModel -> ninjaModel.getIdade() >= 18)
+                .map(ninjaMapper::map)
+                .collect(Collectors.toList());
     }
 
     // criar ninja
@@ -42,11 +58,16 @@ public class NinjaService {
 
     // atualizar ninjas
 
-    public NinjaModel atualizarNinja(Long id, NinjaModel ninjaAtualizado){
-        if (ninjaRepository.existsById(id)) {
+    public NinjaDTO atualizarNinja(Long id, NinjaDTO ninjaDTO){
+        Optional<NinjaModel> ninjaExistente = ninjaRepository.findById(id);
+        if (ninjaExistente.isPresent()) {
+            NinjaModel ninjaAtualizado = ninjaMapper.map(ninjaDTO);
             ninjaAtualizado.setId(id);
-            return ninjaRepository.save(ninjaAtualizado);
+            NinjaModel ninjaSalvo = ninjaRepository.save(ninjaAtualizado);
+            return ninjaMapper.map(ninjaSalvo);
         }
         return null;
     }
+
+
 }
