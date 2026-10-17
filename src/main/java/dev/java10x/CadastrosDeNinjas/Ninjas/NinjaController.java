@@ -32,6 +32,11 @@ public class NinjaController {
         return ninjaService.listarNinjasMaioresDe18Anos();
     }
 
+    @GetMapping("/listarOrdemAlfabetica")
+    public List<NinjaDTO> listarNinjasPorOrdemAlfabetica(){
+        return ninjaService.listarNinjasPorOrdemAlfabetica();
+    }
+
     // CREATE
 
     @PostMapping("/criar")
