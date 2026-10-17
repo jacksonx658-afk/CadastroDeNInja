@@ -3,52 +3,56 @@ package dev.java10x.CadastrosDeNinjas.Missoes;
 import dev.java10x.CadastrosDeNinjas.Ninjas.NinjaModel;
 import dev.java10x.CadastrosDeNinjas.Ninjas.NinjaRepository;
 import org.springframework.stereotype.Service;
-
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 
 public class MissoesService {
 
     MissoesRepository missoesRepository;
+    MissoesMapper missoesMapper;
 
-    public MissoesService(MissoesRepository missoesRepository) {
+    public MissoesService(MissoesRepository missoesRepository, MissoesMapper missoesMapper) {
         this.missoesRepository = missoesRepository;
+        this.missoesMapper = missoesMapper;
     }
 
-    // Listar missoes
-    public List<MissoesModel> listarMissoes(){
-        return missoesRepository.findAll();
+    // listar missoes
+    public List<MissoesDTO> listarMissoes() {
+        return missoesRepository.findAll()
+                .stream()
+                .map(missoesMapper::map)
+                .collect(Collectors.toList());
     }
 
-
-    // listar missoes por id
-    public MissoesModel listarMissaoPorId(Long id){
-        Optional<MissoesModel> MissoesporId = missoesRepository.findById(id);
-        return MissoesporId.orElse(null);
+    // listar missao por id
+    public MissoesDTO listarMissaoPorId(Long id) {
+        Optional<MissoesModel> missaoPorId = missoesRepository.findById(id);
+        return missaoPorId.map(missoesMapper::map).orElse(null);
     }
 
     // criar missao
-    public MissoesModel criarMissao(MissoesModel missao){
-        return missoesRepository.save(missao);
-
-    }
-
-    // deletar missao - Tem quer ser um método VOID
-
-    public void deletarMissaoPorId(Long id){
-        missoesRepository.deleteById(id);
+    public MissoesDTO criarMissao(MissoesDTO missoesDTO) {
+        MissoesModel missao = missoesMapper.map(missoesDTO);
+        missao = missoesRepository.save(missao);
+        return missoesMapper.map(missao);
     }
 
     // atualizar missao
-
-    public MissoesModel atualizarMissao(Long id, MissoesModel missaoAtualizada){
+    public MissoesDTO atualizarMissao(Long id, MissoesDTO missoesDTO) {
         if (missoesRepository.existsById(id)) {
-            missaoAtualizada.setId(id);
-            return missoesRepository.save(missaoAtualizada);
+            MissoesModel missao = missoesMapper.map(missoesDTO);
+            missao.setId(id);
+            missao = missoesRepository.save(missao);
+            return missoesMapper.map(missao);
         }
         return null;
     }
 
+    // deletar missao - tem que ser um método VOID
+    public void deletarMissaoPorId(Long id) {
+        missoesRepository.deleteById(id);
+    }
 }
