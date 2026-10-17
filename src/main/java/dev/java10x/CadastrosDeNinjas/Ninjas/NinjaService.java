@@ -1,32 +1,64 @@
 package dev.java10x.CadastrosDeNinjas.Ninjas;
 
 import org.springframework.stereotype.Service;
+
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
+
 
 @Service
 public class NinjaService {
 
-    private final NinjaRepository ninjaRepository;
+    private NinjaRepository ninjaRepository;
+    private NinjaMapper ninjaMapper;
 
-    public NinjaService(NinjaRepository ninjaRepository) {
+    public NinjaService(NinjaRepository ninjaRepository, NinjaMapper ninjaMapper) {
         this.ninjaRepository = ninjaRepository;
+        this.ninjaMapper = ninjaMapper;
     }
 
     // listar ninjas
-    public List<NinjaModel> listarNinjas() {
-        return ninjaRepository.findAll();
+    public List<NinjaDTO> listarNinjas() {
+        List<NinjaModel> ninja = ninjaRepository.findAll();
+        return ninja.stream()
+                .map(ninjaMapper::map)
+                .collect(Collectors.toList());
     }
 
     // listar ninjas por id
-    public NinjaModel listarNinjasPorId(Long id){
+    public NinjaDTO listarNinjasPorId(Long id){
         Optional<NinjaModel> NinjaporId = ninjaRepository.findById(id);
-        return NinjaporId.orElse(null);
+        return NinjaporId.map(ninjaMapper::map).orElse(null);
+    }
+
+    // listar ninjas maiores de 18 anos
+
+    public List<NinjaDTO> listarNinjasMaioresDe18Anos(){
+        List<NinjaModel> ninjaMaiores = ninjaRepository.findAll();
+        return ninjaMaiores.stream()
+                .filter(ninjaModel -> ninjaModel.getIdade() >= 18)
+                .map(ninjaMapper::map)
+                .collect(Collectors.toList());
+    }
+
+    // listar ninjas maiores de 18 anos
+
+    public List<NinjaDTO> listarNinjasPorOrdemAlfabetica(){
+        List<NinjaModel> ninjas = ninjaRepository.findAll();
+        return ninjas.stream()
+                .sorted(Comparator.comparing(NinjaModel::getNome))
+                .map(ninjaMapper::map)
+                .collect(Collectors.toList());
     }
 
     // criar ninja
-    public NinjaModel criarNinjas(NinjaModel ninja){
-        return ninjaRepository.save(ninja);
+
+    public NinjaDTO criarNinjas(NinjaDTO ninjaDTO){
+        NinjaModel ninja = ninjaMapper.map(ninjaDTO);
+        ninja = ninjaRepository.save(ninja);
+        return ninjaMapper.map(ninja);
 
     }
 
@@ -38,11 +70,16 @@ public class NinjaService {
 
     // atualizar ninjas
 
-    public NinjaModel atualizarNinja(Long id, NinjaModel ninjaAtualizado){
-        if (ninjaRepository.existsById(id)) {
+    public NinjaDTO atualizarNinja(Long id, NinjaDTO ninjaDTO){
+        Optional<NinjaModel> ninjaExistente = ninjaRepository.findById(id);
+        if (ninjaExistente.isPresent()) {
+            NinjaModel ninjaAtualizado = ninjaMapper.map(ninjaDTO);
             ninjaAtualizado.setId(id);
-            return ninjaRepository.save(ninjaAtualizado);
+            NinjaModel ninjaSalvo = ninjaRepository.save(ninjaAtualizado);
+            return ninjaMapper.map(ninjaSalvo);
         }
         return null;
     }
+
+
 }
